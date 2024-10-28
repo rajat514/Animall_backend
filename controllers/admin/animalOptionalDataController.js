@@ -38,7 +38,7 @@ const handleGetAllOptionalData = async (req, res) => {
 const handleGetAnimalBaby = async (req, res) => {
     try {
 
-        const optionalData = await OptionalData.find({ type: 'Has the pashu delivered baby' });
+        const optionalData = await OptionalData.find({ type: 'pashu_delivered_baby' });
 
         return res.status(200).json({ data: optionalData });
 
@@ -51,7 +51,7 @@ const handleGetAnimalBaby = async (req, res) => {
 const handleGetAnimalPregnant = async (req, res) => {
     try {
 
-        const optionalData = await OptionalData.find({ type: 'Is it pregnant' });
+        const optionalData = await OptionalData.find({ type: 'Is_pregnant' });
 
         return res.status(200).json({ data: optionalData });
 
@@ -64,7 +64,7 @@ const handleGetAnimalPregnant = async (req, res) => {
 const handleGetAnimalCalf = async (req, res) => {
     try {
 
-        const optionalData = await OptionalData.find({ type: 'Calf with animal' });
+        const optionalData = await OptionalData.find({ type: 'Calf_with_animal' });
 
         return res.status(200).json({ data: optionalData });
 

@@ -15,8 +15,9 @@ const animalBreedSchema = mongoose.Schema({
     },
     lang: [
         {
-            // langId: String,
-            // name: String
+            langCode: String,
+            name: String,
+            _id: false
         }
     ]
 },

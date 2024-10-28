@@ -4,7 +4,7 @@ const router = express.Router();
 
 const { validateAnimalCategory, validateAnimalBreed, validateAnimalOptionalData } = require("../validator/validateAnimal");
 
-const { validateDoctor } = require("../validator/validateUser")
+const { validateDoctor, validateUserProfileInfo } = require("../validator/validateUser")
 
 const { handleAddAnimalCategory, handleGetAnimalCategory } = require("../controllers/admin/animalCategoryController");
 
@@ -16,7 +16,9 @@ const { handleAddDoctor } = require("../controllers/admin/doctorController");
 
 const { isLogIn } = require("../middleware/auth");
 
-const { handleAnimalBaby, handleGetAllOptionalData } = require("../controllers/admin/animalOptionalData");
+const { handleAnimalBaby, handleGetAllOptionalData } = require("../controllers/admin/animalOptionalDataController");
+
+const { handleUserProfileInfo } = require("../controllers/admin/userProfileInfoController")
 
 
 
@@ -34,10 +36,9 @@ router.post("/add-optional-data", isLogIn, validateAnimalOptionalData, handleAni
 
 router.get("/all-optional-data", isLogIn, handleGetAllOptionalData);
 
-router.get("/animal-lactation", isLogIn, handleGetAnimalLactation);
-
 router.post("/add-doctor", isLogIn, validateDoctor, handleAddDoctor);
 
+router.post("/add-profile-info", isLogIn, validateUserProfileInfo, handleUserProfileInfo);
 
 
 

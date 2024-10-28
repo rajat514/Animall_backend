@@ -1,4 +1,5 @@
 const User = require("../../modals/user");
+const ProfileInfo = require("../../modals/profileInfo");
 
 const { imageValidation } = require("../../helpers/image");
 
@@ -32,7 +33,8 @@ const handleUpdateName = async (req, res) => {
 
 const handleGetUserProfile = async (req, res) => {
     try {
-        const userData = await User.findOne({ _id: req.user._id });
+        const userData = await User.findOne({ _id: req.user._id })
+            .populate('workId animalHusbandryId useAnimalAppId educationLevelId')
 
         return res.status(200).json({ data: userData });
 
@@ -48,23 +50,24 @@ const handleCompleteProfile = async (req, res) => {
         if (!error.isEmpty()) {
             return res.status(400).json({ errorMsg: error.array() })
         }
-        const { name, languages, address, whatsUpNumber, birthday, numberOfAnimal, work, howManyYearsOfAnimalHusbandry, whyDoYouUseTheApp, educationLevel } = matchedData(req);
+        const { name, languages, address, whatsUpNumber, birthday, numberOfAnimal, workId, animalHusbandryId, useAnimalAppId, educationLevelId } = matchedData(req);
 
         const files = req.body.images;
-        // console.log('files :', files)
-        if (!Array.isArray(files)) return res.status(400).json({ errorMsg: 'please sent files in an array' });
-
-        const value = await imageValidation(files);
-
-        if (value) {
-            console.log(value)
-            return res.status(400).json({ errorMsg: value });
-        }
 
         const user = await User.findOne({ _id: req.user._id });
 
+        if (!user) return res.status(404).json({ errorMsg: 'user not found!' });
 
-        if (files) user.photo = files.name;
+        if (files) {
+            const value = await imageValidation(files);
+
+            if (value) {
+                console.log(value)
+                return res.status(400).json({ errorMsg: value });
+            }
+            if (files) user.photo = files.name;
+        }
+
 
         if (name) user.name = name;
 
@@ -78,13 +81,25 @@ const handleCompleteProfile = async (req, res) => {
 
         if (numberOfAnimal) user.numberOfAnimal = numberOfAnimal;
 
-        if (work) user.work = work;
+        if (workId) {
+            if (!await ProfileInfo.findOne({ _id: workId })) return res.status(404).json({ errorMsg: 'workId not found' });
+            user.workId = workId;
+        }
 
-        if (howManyYearsOfAnimalHusbandry) user.howManyYearsOfAnimalHusbandry = howManyYearsOfAnimalHusbandry;
+        if (animalHusbandryId) {
+            if (!await ProfileInfo.findOne({ _id: animalHusbandryId })) return res.status(404).json({ errorMsg: 'animalHusbandryId not found' });
+            user.animalHusbandryId = animalHusbandryId;
+        }
 
-        if (whyDoYouUseTheApp) user.whyDoYouUseTheApp = whyDoYouUseTheApp;
+        if (useAnimalAppId) {
+            if (!await ProfileInfo.findOne({ _id: useAnimalAppId })) return res.status(404).json({ errorMsg: 'useAnimalAppId not found' });
+            user.useAnimalAppId = useAnimalAppId;
+        }
 
-        if (educationLevel) user.educationLevel = educationLevel;
+        if (educationLevelId) {
+            if (!await ProfileInfo.findOne({ _id: educationLevelId })) return res.status(404).json({ errorMsg: 'educationLevelId not found' });
+            user.educationLevelId = educationLevelId;
+        }
 
         user.save();
 

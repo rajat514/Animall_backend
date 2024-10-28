@@ -43,17 +43,13 @@ const handleSellAnimal = async (req, res) => {
         if (!error.isEmpty()) {
             return res.status(400).json({ errorMsg: error.array() })
         }
-        const { animalId, breedId, lactation, currentMilk, milkCapacity, file_type_0, file_type_1, price,
-            isNegotiable, isPrime, animalBaby, pregnent, calfGender, info } = matchedData(req);
+        const { animalId, breedId, lactationId, currentMilk, milkCapacity, file_type_0, file_type_1, price,
+            isNegotiable, isPrime, animalBabyId, pregnentId, calfGenderId, info } = matchedData(req);
 
         let files = req.body.file;
 
         if (!files.length <= 0) {
             return res.status(400).json({ errorMsg: 'minimum one file is required!' })
-        }
-
-        if (!Array.isArray(files)) {
-            files = [files];  // Convert single file object to an array
         }
 
         if (file_type_0) {
@@ -69,9 +65,9 @@ const handleSellAnimal = async (req, res) => {
                 return res.status(400).json({ errorMsg: 'only four images allowed!' })
             }
         }
-        
+
         const value = await imageValidation(files);
-        
+
 
         if (value) {
             console.log(value)
@@ -80,7 +76,7 @@ const handleSellAnimal = async (req, res) => {
 
         let array = [];
 
-        for (let index of files) { 
+        for (let index of files) {
             let obj = {};
 
             if (index.mimetype === 'video/mp4') {
@@ -96,12 +92,12 @@ const handleSellAnimal = async (req, res) => {
 
             array.push(obj)
         }
-     
+
         const animalData = await Animal.create({
             userId: req.user._id,
             animalId,
             breedId,
-            lactation,
+            lactationId,
             currentMilk,
             milkCapacity,
             files: array,
@@ -109,14 +105,14 @@ const handleSellAnimal = async (req, res) => {
             isNegotiable,
             isPrime,
             optionalData: {
-                animalBaby,
-                pregnent,
-                calfGender,
+                animalBabyId,
+                pregnentId,
+                calfGenderId,
                 info
             }
         });
 
-        // console.log("animalData : ", animalData)
+        console.log("animalData : ", animalData)
         return res.status(201).json({ successMsg: 'animal uploaded.', data: animalData });
 
     } catch (error) {

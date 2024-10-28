@@ -19,11 +19,15 @@ const { handleGetAnimal, handleGetAnimalBreed, handleSellAnimal } = require("../
 
 const { handleGetAllAnimal, handleGetNearbyAnimal, handleGetPrimeAnimal } = require("../controllers/user/buyAnimalController");
 
-const { handleGetUserAnimal, handleGetUserPrimeAnimal } = require("../controllers/user/userAnimalController");
+const { handleGetUserAnimal, handleGetUserPrimeAnimal, handleDeleteAnimal } = require("../controllers/user/userAnimalController");
 
 const { handleGetDoctor, handleExpriencedDoctor } = require("../controllers/admin/doctorController");
 
-const { handleGetAnimalBaby, handleGetAnimalPregnant, handleGetAnimalCalf } = require("../controllers/admin/animalOptionalData");
+const { handleGetAnimalBaby, handleGetAnimalPregnant, handleGetAnimalCalf } = require("../controllers/admin/animalOptionalDataController");
+
+const { handleGetAnimalLactation } = require("../controllers/admin/animalLactationController");
+
+const { handleUserProfileWork, handleUserProfileHusbandry, handleUserProfileUseApp, handleUserProfileEducation } = require("../controllers/admin/userProfileInfoController")
 
 
 
@@ -62,6 +66,8 @@ router.get("/animal-breed", isLogIn, handleGetAnimalBreed);
 
 router.get("/animal-category", isLogIn, handleGetAnimal);
 
+router.get("/animal-lactation", isLogIn, handleGetAnimalLactation);
+
 router.get("/get-animal-baby", isLogIn, handleGetAnimalBaby);
 
 router.get("/get-animal-pregnant", isLogIn, handleGetAnimalPregnant);
@@ -71,6 +77,8 @@ router.get("/get-animal-calf", isLogIn, handleGetAnimalCalf);
 router.post("/sell-animal", isLogIn, validateSellAnimal, handleSellAnimal);
 
 router.get("/your-animal", isLogIn, handleGetUserAnimal);
+
+router.delete("/delete-animal/:animalId", isLogIn, handleDeleteAnimal);
 
 router.get("/nearby-animals", isLogIn, handleGetNearbyAnimal);
 
@@ -83,6 +91,14 @@ router.get("/user-prime-animal", isLogIn, handleGetUserPrimeAnimal);
 router.get("/nearby-doctors", isLogIn, handleGetDoctor);
 
 router.get("/exprienced-doctors", isLogIn, handleExpriencedDoctor);
+
+router.get("/user-work", isLogIn, handleUserProfileWork);
+
+router.get("/animal-husbandry", isLogIn, handleUserProfileHusbandry);
+
+router.get("/use-animal-app", isLogIn, handleUserProfileUseApp);
+
+router.get("/user-education-level", isLogIn, handleUserProfileEducation);
 
 
 module.exports = router

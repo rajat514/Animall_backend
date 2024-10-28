@@ -1,6 +1,8 @@
 const Doctor = require("../../modals/doctor");
 const User = require("../../modals/user");
 
+const { imageValidation } = require("../../helpers/image");
+
 const { validationResult, matchedData } = require("express-validator");
 
 
@@ -10,12 +12,30 @@ const handleAddDoctor = async (req, res) => {
         if (!error.isEmpty()) {
             return res.status(400).json({ errorMsg: error.array() });
         };
-        const { name, profession, experience, address, longitude, latitude } = matchedData(req);
+        const { name, profession, experience, education, phoneNo, whatsUpNo, address, longitude, latitude } = matchedData(req);
 
+        let files = req.body.image
+
+
+        // console.log(files.length)
+        // if (files.length > 1) return res.status(400).json({ errorMsg: 'only one file is required!' })
+
+        const value = await imageValidation(files);
+
+
+        if (value) {
+            console.log(value)
+            return res.status(400).json({ errorMsg: value });
+        }
+        // console.log(files)
         const newDoctor = await Doctor.create({
             name,
             profession,
             experience,
+            education,
+            phoneNo,
+            whatsUpNo,
+            image: files.name,
             address,
             location: {
                 type: 'Point',
@@ -26,7 +46,7 @@ const handleAddDoctor = async (req, res) => {
         return res.status(201).json({ successMsg: 'dector added!', data: newDoctor });
 
     } catch (error) {
-        // console.log(error)
+        console.log(error)
         return res.status(500).json({ errorMsg: error })
     }
 };
@@ -35,6 +55,7 @@ const handleAddDoctor = async (req, res) => {
 const handleGetDoctor = async (req, res) => {
     try {
         const user = await User.findOne({ _id: req.user._id })
+        
         const longitude = parseFloat(user.location.coordinates[0]);
         const latitude = parseFloat(user.location.coordinates[1]);
 
@@ -61,6 +82,7 @@ const handleGetDoctor = async (req, res) => {
         return res.status(200).json({ data: nearByDoctor });
 
     } catch (error) {
+        console.log(error)
         return res.status(500).json({ errorMsg: error })
     }
 };

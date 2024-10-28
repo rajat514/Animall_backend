@@ -7,7 +7,11 @@ const lactationSchema = mongoose.Schema({
     //     require: true,
     //     unique: true
     // },
-    lang: [{}]
+    lang: [{
+        langCode: String,
+        name: String,
+        _id: false
+    }]
 },
     { timestamps: true }
 )

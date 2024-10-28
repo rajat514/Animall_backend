@@ -18,6 +18,22 @@ const doctorSchema = mongoose.Schema({
         type: String,
         require: true
     },
+    education: {
+        type: String,
+        require: true
+    },
+    phoneNo: {
+        type: String,
+        require: true
+    },
+    whatsUpNo: {
+        type: String,
+        default: ''
+    },
+    image: {
+        type: String,
+        require: true
+    },
     location: {
         type: {
             type: String,
@@ -26,9 +42,10 @@ const doctorSchema = mongoose.Schema({
         },
         coordinates: {
             type: [],
-            require: true
+            // require: true
         }
-    }
+    },
+    // eduacation, phone, what nbr, imageprofile, 
 },
     { timestamps: true }
 );

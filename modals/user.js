@@ -7,51 +7,53 @@ const profileSchema = mongoose.Schema({
         default: ''
     },
     name: {
-        type: String
+        type: String,
+        default: ''
     },
     languages: {
         type: String,
+        default: ''
     },
     address: {
-        type: String
+        type: String,
+        default: ''
     },
     whatsUpNumber: {
-        type: Number
+        type: Number,
+        default: ''
     },
     phone: {
-        type: Number
+        type: Number,
+        default: ''
     },
     birthday: {
-        type: Date
+        type: Date,
+        default: ''
     },
     numberOfAnimal: {
         type: String,
-        default: ''
+        default: '0'
     },
-    work: {
-        type: String,
-        default: ''
-        // enum: ['Keeping animals for home', 'Farming', 'Dairy business', 'Buy/Sell business', 'Other']
+    workId: {
+        type: mongoose.ObjectId,
+        ref: 'profile-info-db'
     },
-    howManyYearsOfAnimalHusbandry: {
-        type: String,
-        default: ''
-        // enum: ['0-5 years', '6-10 years', '11-15 years', '16-25 years', '25-30 years', 'More than 30 years']
+    animalHusbandryId: {
+        type: mongoose.ObjectId,
+        ref: 'profile-info-db',
     },
-    whyDoYouUseTheApp: {
-        type: String,
-        default: ''
-        // enum: ['Buying or selling animals for home', 'For business', 'Buying or selling animals for dairy']
+    useAnimalAppId: {
+        type: mongoose.ObjectId,
+        ref: 'profile-info-db',
     },
-    educationLevel: {
-        type: String,
-        default: ''
-        // enum: ['No education', 'Basic education', 'Up to 5th grade', 'Up to 8th grade', 'Up to 10th grade', 'Up to 12th grade', 'Graduate', 'Other']
+    educationLevelId: {
+        type: mongoose.ObjectId,
+        ref: 'profile-info-db'
     },
     location: {
         type: {
-            type: String, // Don't do `{ location: { type: String } }`
-            enum: ['Point'], // 'location.type' must be 'Point'
+            type: String,
+            enum: ['Point'],
             require: true
         },
         coordinates: {

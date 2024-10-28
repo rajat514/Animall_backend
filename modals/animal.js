@@ -14,11 +14,11 @@ const animalSchema = mongoose.Schema({
         type: mongoose.ObjectId,
         ref: 'animal-breed-db'
     },
-    lactation: {
-        type: String,
-        require: true
-        // type: mongoose.ObjectId,
-        // ref: 'animal-lactation-db'
+    lactationId: {
+        // type: String,
+        // require: true
+        type: mongoose.ObjectId,
+        ref: 'animal-lactation-db'
     },
     currentMilk: {
         type: String
@@ -48,26 +48,29 @@ const animalSchema = mongoose.Schema({
         default: false
     },
     optionalData: {
-        animalBaby: {
-            type: String
+        animalBabyId: {
+            type: mongoose.ObjectId,
+            ref: 'animal-optional-info-db'
         },
-        pregnent: {
-            type: String
+        pregnentId: {
+            type: mongoose.ObjectId,
+            ref: 'animal-optional-info-db'
         },
-        calfGender: {
-            type: String,
-            // enum: ['Male', 'Female', 'No calf']
+        calfGenderId: {
+            type: mongoose.ObjectId,
+            ref: 'animal-optional-info-db'
         },
         info: {
             type: String
         }
     },
-    lang: [
-        {
-            langCode: String,
-            langName: String
-        }
-    ],
+    // lang: [
+    //     {
+    //         langCode: String,
+    //         name: String,
+    //         _id: false
+    //     }
+    // ],
     // location: {
     //     type: {
     //         type: String, // Don't do `{ location: { type: String } }`
@@ -84,7 +87,7 @@ const animalSchema = mongoose.Schema({
 );
 
 
-animalSchema.index({ location: "2dsphere" });
+// animalSchema.index({ location: "2dsphere" });
 
 const Animal = mongoose.model('animal-db', animalSchema);
 

@@ -17,8 +17,9 @@ const animalSchema = mongoose.Schema({
     },
     lang: [
         {
-            // langCode: String,
-            // name: String
+            langCode: String,
+            name: String,
+            _id: false
         }
     ]
 },

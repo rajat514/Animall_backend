@@ -5,7 +5,9 @@ const User = require("../../modals/user");
 
 const handleGetAllAnimal = async (req, res) => {
     try {
-        const data = await Animal.find().populate('userId').populate('animalId').populate('breedId');
+        const data = await Animal.find()
+            .populate('userId animalId breedId lactationId optionalData.animalBabyId optionalData.pregnentId optionalData.calfGenderId')
+            .sort({ createdAt: -1 })
 
         return res.status(200).json({ data: data });
 
@@ -35,9 +37,10 @@ const handleGetNearbyAnimal = async (req, res) => {
         let array = []
         for (let i = 0; i <= nearByUsers.length - 1; i++) {
 
-            const nearByAnimals = await Animal.findOne({ userId: nearByUsers[i]._id })//.populate('userId').populate('animalId').populate('breedId');
+            const nearByAnimals = await Animal.findOne({ userId: nearByUsers[i]._id })
+                .populate('userId animalId breedId lactationId optionalData.animalBabyId optionalData.pregnentId optionalData.calfGenderId')
             if (nearByAnimals) {
-                array.push(nearByAnimals)
+                array.unshift(nearByAnimals)
             }
         }
         return res.status(200).json({ data: array });
@@ -58,8 +61,9 @@ const handleGetPrimeAnimal = async (req, res) => {
         if (search) where.name = { $regex: search, $options: 'i' };
         if (isPrime) where.isPrime = isPrime;
         if (animalId) where.animalId = animalId;
-        console.log('where : ', where)
+        // console.log('where : ', where)
         const user = await User.findOne({ _id: req.user._id })
+        if (!user) return res.status(404).json({ errorMsg: 'user not found!' })
         const longitude = parseFloat(user.location.coordinates[0]);
         const latitude = parseFloat(user.location.coordinates[1]);
 
@@ -78,9 +82,11 @@ const handleGetPrimeAnimal = async (req, res) => {
         let array = []
         for (let i = 0; i <= nearByUsers.length - 1; i++) {
 
-            const nearByAnimals = await Animal.findOne({ userId: nearByUsers[i]._id }, where)//.populate('userId').populate('animalId').populate('breedId');
+            const nearByAnimals = await Animal.findOne({ userId: nearByUsers[i]._id }, where)
+                .populate('userId animalId breedId lactationId optionalData.animalBabyId optionalData.pregnentId optionalData.calfGenderId')
+
             if (nearByAnimals) {
-                array.push(nearByAnimals)
+                array.unshift(nearByAnimals)
             }
         }
         return res.status(200).json({ data: array });
